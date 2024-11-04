@@ -8,6 +8,13 @@
       "when": 1730632487435,
       "tag": "0000_fair_doctor_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1730633427270,
+      "tag": "0001_careless_nehzno",
+      "breakpoints": true
     }
   ]
 }

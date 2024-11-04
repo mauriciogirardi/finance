@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Open_Sans, Lato } from "next/font/google";
+import { Providers } from "@/providers";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -32,7 +33,7 @@ export default function RootLayout({
         <body
           className={`${openSans.variable} ${robotoMono.variable} font-lato`}
         >
-          {children}
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>
