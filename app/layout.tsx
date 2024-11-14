@@ -28,8 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
+    <ClerkProvider
+      appearance={{
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: false,
+        },
+      }}
+    >
+      <html lang="en">
         <body
           className={`${openSans.variable} ${robotoMono.variable} font-lato`}
         >

@@ -13,7 +13,6 @@ export default function SignUpPage() {
           path="/sign-up"
           appearance={{
             layout: {
-              unsafe_disableDevelopmentModeWarnings: true,
               animations: true,
               socialButtonsPlacement: "bottom",
             },

@@ -13,7 +13,6 @@ export default function SignInPage() {
           path="/sign-in"
           appearance={{
             layout: {
-              unsafe_disableDevelopmentModeWarnings: true,
               animations: true,
               socialButtonsPlacement: "bottom",
             },

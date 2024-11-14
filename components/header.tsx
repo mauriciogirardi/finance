@@ -14,13 +14,7 @@ export function Header() {
             <Navigation />
           </div>
           <ClerkLoaded>
-            <UserButton
-              appearance={{
-                layout: {
-                  unsafe_disableDevelopmentModeWarnings: true,
-                },
-              }}
-            />
+            <UserButton />
           </ClerkLoaded>
           <ClerkLoading>
             <Skeleton className="size-7 rounded-full" />
