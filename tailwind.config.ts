@@ -8,6 +8,7 @@ const config: Config = {
     "./components/**/*.tsx",
     "./app/**/*.tsx",
     "./features/**/*.tsx",
+    "./hooks/**/*.tsx",
   ],
   theme: {
     extend: {
