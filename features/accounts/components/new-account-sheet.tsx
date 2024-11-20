@@ -42,6 +42,7 @@ export function NewAccountSheet() {
           onSubmit={handleSubmit}
           defaultValues={{ name: "" }}
           disabled={isPending}
+          isLoading={isPending}
         />
       </SheetContent>
     </Sheet>

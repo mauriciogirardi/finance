@@ -24,15 +24,17 @@ type AccountFormProps = {
   onSubmit: (values: FormValues) => void;
   onDelete?: () => void;
   disabled?: boolean;
+  isLoading?: boolean;
   className?: string;
 };
 
 export function AccountForm({
   onSubmit,
   defaultValues,
-  disabled,
+  disabled = false,
   id,
   onDelete,
+  isLoading = false,
   className,
 }: AccountFormProps) {
   const form = useForm<FormValues>({
@@ -72,7 +74,11 @@ export function AccountForm({
             )}
           />
 
-          <Button disabled={disabled} className="w-full md:w-min lg:w-full">
+          <Button
+            disabled={disabled}
+            className="w-full md:w-min lg:w-full"
+            isLoading={isLoading}
+          >
             {id ? <Check /> : <Plus />}
             {id ? "Save changes" : "Create account"}
           </Button>
@@ -84,6 +90,7 @@ export function AccountForm({
               onClick={handleDelete}
               className="w-full md:w-min lg:w-full"
               variant="outline"
+              isLoading={isLoading}
             >
               <Trash className="size-4 mr-2" />
               Delete account

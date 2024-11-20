@@ -25,7 +25,7 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { ChevronLeft, ChevronRight, Trash } from "lucide-react";
-import { useMountedState } from "react-use";
+import { Skeleton } from "./ui/skeleton";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,6 +33,7 @@ interface DataTableProps<TData, TValue> {
   filterKey: string;
   onDelete: (rows: Row<TData>[]) => void;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,7 +41,8 @@ export function DataTable<TData, TValue>({
   data,
   filterKey,
   onDelete,
-  disabled,
+  disabled = false,
+  isLoading = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -63,6 +65,8 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+
   return (
     <div>
       <div className="flex items-center py-4">
@@ -72,18 +76,22 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn(filterKey)?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm h-9"
         />
-        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        {selectedRows.length > 0 && (
           <Button
-            variant="outline"
+            variant="destructive"
             size="sm"
-            className="ml-auto font-normal text-xs"
-            onClick={() => onDelete(table.getFilteredSelectedRowModel().rows)}
+            className="ml-auto font-normal w-28"
+            onClick={() => {
+              onDelete(selectedRows);
+              table.resetRowSelection();
+            }}
             disabled={disabled}
+            isLoading={isLoading}
           >
             <Trash />
-            Delete ({table.getFilteredSelectedRowModel().rows.length})
+            Delete ({selectedRows.length})
           </Button>
         )}
       </div>
@@ -115,14 +123,24 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    if (isLoading) {
+                      return (
+                        <TableCell key={cell.id}>
+                          <Skeleton className="w-full h-5" />
+                        </TableCell>
+                      );
+                    }
+
+                    return (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (
