@@ -4,6 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { client } from "@/lib/hono";
+import { Actions } from "./actions";
 
 export type ResponseType = InferResponseType<
   typeof client.api.accounts.$get,
@@ -48,5 +49,13 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <div className=" flex justify-end">
+        <Actions id={row.original.id} />
+      </div>
+    ),
   },
 ];

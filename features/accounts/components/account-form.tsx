@@ -25,6 +25,7 @@ type AccountFormProps = {
   onDelete?: () => void;
   disabled?: boolean;
   isLoading?: boolean;
+  isLoadingDelete?: boolean;
   className?: string;
 };
 
@@ -35,6 +36,7 @@ export function AccountForm({
   id,
   onDelete,
   isLoading = false,
+  isLoadingDelete = false,
   className,
 }: AccountFormProps) {
   const form = useForm<FormValues>({
@@ -90,7 +92,7 @@ export function AccountForm({
               onClick={handleDelete}
               className="w-full md:w-min lg:w-full"
               variant="outline"
-              isLoading={isLoading}
+              isLoading={isLoadingDelete}
             >
               <Trash className="size-4 mr-2" />
               Delete account
