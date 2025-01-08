@@ -69,6 +69,7 @@ export function AccountForm({
                   <Input
                     disabled={disabled}
                     placeholder="e.g Cash, Bank, Credit Card"
+                    autoComplete="off"
                     {...field}
                   />
                 </FormControl>
@@ -77,7 +78,7 @@ export function AccountForm({
           />
 
           <Button
-            disabled={disabled}
+            disabled={disabled || !form.formState.isDirty}
             className="w-full md:w-min lg:w-full"
             isLoading={isLoading}
           >

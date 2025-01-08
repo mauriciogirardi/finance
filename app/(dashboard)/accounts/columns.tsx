@@ -52,10 +52,12 @@ export const columns: ColumnDef<ResponseType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <div className=" flex justify-end">
-        <Actions id={row.original.id} />
-      </div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" flex justify-end">
+          <Actions id={row.original.id} />
+        </div>
+      );
+    },
   },
 ];
