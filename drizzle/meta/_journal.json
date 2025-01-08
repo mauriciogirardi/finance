@@ -15,6 +15,13 @@
       "when": 1730633427270,
       "tag": "0001_careless_nehzno",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1736375219923,
+      "tag": "0002_aromatic_pretty_boy",
+      "breakpoints": true
     }
   ]
 }
