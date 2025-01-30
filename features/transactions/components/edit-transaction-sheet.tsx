@@ -7,31 +7,31 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { AccountForm } from "./account-form";
-import { insertAccountSchema } from "@/db/schema";
+import { insertTransactionSchema } from "@/db/schema";
 import { z } from "zod";
-import { useOpenAccount } from "../hooks/use-open-accounts";
-import { useGetAccount } from "../api/use-get-account";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUpdateAccount } from "../api/use-update-account";
-import { useDeleteAccount } from "../api/use-delete-account";
 import { useConfirm } from "@/hooks/use-confirm";
+import { useOpenTransaction } from "../hooks/use-open-transactions";
+import { useGetTransaction } from "../api/use-get-transaction";
+import { useUpdateTransaction } from "../api/use-update-transaction";
+import { useDeleteTransaction } from "../api/use-delete-transaction";
+import { TransactionForm } from "./transaction-form";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const formSchema = insertAccountSchema.pick({ name: true });
+const formSchema = insertTransactionSchema.omit({ id: true });
 type FormValues = z.input<typeof formSchema>;
 
-export function EditAccountSheet() {
+export function EditTransactionSheet() {
   const [ConfirmationDialog, confirm] = useConfirm(
     "Are you sure?",
-    "You are about to delete this account."
+    "You are about to delete this transaction."
   );
 
-  const { isOpen, onClose, id } = useOpenAccount();
+  const { isOpen, onClose, id } = useOpenTransaction();
 
-  const accountQuery = useGetAccount(id);
-  const editMutation = useUpdateAccount(id);
-  const deleteMutation = useDeleteAccount(id);
+  const transactionQuery = useGetTransaction(id);
+  const editMutation = useUpdateTransaction(id);
+  const deleteMutation = useDeleteTransaction(id);
 
   const handleSubmit = (values: FormValues) => {
     editMutation.mutate(values, {
@@ -50,11 +50,16 @@ export function EditAccountSheet() {
   };
 
   const defaultValues = {
-    name: accountQuery?.data?.name || "",
+    amount: transactionQuery?.data?.amount || "",
+    notes: transactionQuery?.data?.notes || "",
+    payee: transactionQuery?.data?.payee || "",
+    accountId: transactionQuery?.data?.accountId || "",
+    categoryId: transactionQuery?.data?.categoryId || "",
+    date: transactionQuery?.data?.date || "",
   };
 
   const isPending = editMutation.isPending || deleteMutation.isPending;
-  const isLoading = accountQuery.isLoading;
+  const isLoading = transactionQuery.isLoading;
 
   return (
     <>
@@ -62,8 +67,8 @@ export function EditAccountSheet() {
       <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent className="space-y-4">
           <SheetHeader className="text-left">
-            <SheetTitle>Edit Account</SheetTitle>
-            <SheetDescription>Edit an existing account.</SheetDescription>
+            <SheetTitle>Edit Transaction</SheetTitle>
+            <SheetDescription>Edit an existing transaction.</SheetDescription>
           </SheetHeader>
 
           {isLoading && (
@@ -78,7 +83,7 @@ export function EditAccountSheet() {
           )}
 
           {!isLoading && (
-            <AccountForm
+            <TransactionForm
               onSubmit={handleSubmit}
               defaultValues={defaultValues}
               disabled={isPending}

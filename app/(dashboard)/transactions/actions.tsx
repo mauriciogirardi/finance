@@ -7,8 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteAccount } from "@/features/accounts/api/use-delete-account";
-import { useOpenAccount } from "@/features/accounts/hooks/use-open-accounts";
+import { useDeleteTransaction } from "@/features/transactions/api/use-delete-transaction";
+import { useOpenTransaction } from "@/features/transactions/hooks/use-open-transactions";
 import { useConfirm } from "@/hooks/use-confirm";
 import { Edit, MoreHorizontal, Trash2 } from "lucide-react";
 
@@ -19,11 +19,11 @@ type ActionsProps = {
 export function Actions({ id }: ActionsProps) {
   const [ConfirmationDialog, confirm] = useConfirm(
     "Are you sure?",
-    "You are about to delete this account."
+    "You are about to delete this transaction."
   );
 
-  const { onOpen } = useOpenAccount();
-  const deleteMutation = useDeleteAccount(id);
+  const { onOpen } = useOpenTransaction();
+  const deleteMutation = useDeleteTransaction(id);
 
   const handleDelete = async () => {
     const ok = await confirm();
@@ -55,7 +55,7 @@ export function Actions({ id }: ActionsProps) {
           <DropdownMenuItem
             disabled={deleteMutation.isPending}
             onClick={() => onOpen(id)}
-            aria-label="Edit account"
+            aria-label="Edit transaction"
           >
             <Edit className="size-4" />
             Edit
@@ -63,7 +63,7 @@ export function Actions({ id }: ActionsProps) {
           <DropdownMenuItem
             disabled={deleteMutation.isPending}
             onClick={handleDelete}
-            aria-label="Delete account"
+            aria-label="Delete transaction"
           >
             <Trash2 className="size-4" />
             Delete
