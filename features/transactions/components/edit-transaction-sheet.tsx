@@ -16,6 +16,10 @@ import { useGetTransaction } from "../api/use-get-transaction";
 import { useUpdateTransaction } from "../api/use-update-transaction";
 import { useDeleteTransaction } from "../api/use-delete-transaction";
 import { TransactionForm } from "./transaction-form";
+import { useGetCategories } from "@/features/categories/api/use-get-categories";
+import { useCreateCategory } from "@/features/categories/api/use-create-category";
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
+import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = insertTransactionSchema.omit({ id: true });
@@ -32,6 +36,10 @@ export function EditTransactionSheet() {
   const transactionQuery = useGetTransaction(id);
   const editMutation = useUpdateTransaction(id);
   const deleteMutation = useDeleteTransaction(id);
+  const categoryQuery = useGetCategories();
+  const categoryMutation = useCreateCategory();
+  const accountQuery = useGetAccounts();
+  const accountMutation = useCreateAccount();
 
   const handleSubmit = (values: FormValues) => {
     editMutation.mutate(values, {
@@ -50,16 +58,41 @@ export function EditTransactionSheet() {
   };
 
   const defaultValues = {
-    amount: transactionQuery?.data?.amount || "",
+    amount: String(transactionQuery?.data?.amount) || "",
     notes: transactionQuery?.data?.notes || "",
     payee: transactionQuery?.data?.payee || "",
     accountId: transactionQuery?.data?.accountId || "",
     categoryId: transactionQuery?.data?.categoryId || "",
-    date: transactionQuery?.data?.date || "",
+    date: transactionQuery?.data?.date
+      ? new Date(transactionQuery?.data?.date)
+      : new Date(),
   };
 
-  const isPending = editMutation.isPending || deleteMutation.isPending;
-  const isLoading = transactionQuery.isLoading;
+  const handleCreateAccount = (name: string) =>
+    accountMutation.mutate({ name });
+
+  const handleCreateCategory = (name: string) =>
+    categoryMutation.mutate({ name });
+
+  const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
+
+  const accountOptions = (accountQuery.data ?? []).map((account) => ({
+    label: account.name,
+    value: account.id,
+  }));
+
+  const isPending =
+    editMutation.isPending ||
+    deleteMutation.isPending ||
+    categoryMutation.isPending ||
+    accountMutation.isPending;
+  const isLoading =
+    transactionQuery.isLoading ||
+    accountQuery.isLoading ||
+    categoryQuery.isLoading;
 
   return (
     <>
@@ -74,11 +107,33 @@ export function EditTransactionSheet() {
           {isLoading && (
             <div className="space-y-4 pt-4">
               <div>
-                <span className="text-sm pb-1">Name</span>
+                <Skeleton className="h-[38px] w-full" />
+              </div>
+              <div>
+                <span className="text-sm pb-1">Account</span>
+                <Skeleton className="h-[38px] w-full" />
+              </div>
+              <div>
+                <span className="text-sm pb-1">Category</span>
+                <Skeleton className="h-[38px] w-full" />
+              </div>
+              <div>
+                <span className="text-sm pb-1">Payee</span>
+                <Skeleton className="h-[38px] w-full" />
+              </div>
+              <div>
+                <span className="text-sm pb-1">Amount</span>
+                <Skeleton className="h-[38px] w-full" />
+              </div>
+              <div>
+                <span className="text-sm pb-1">Notes</span>
+                <Skeleton className="h-20 w-full" />
+              </div>
+
+              <div className="space-y-2">
+                <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
               </div>
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
             </div>
           )}
 
@@ -91,6 +146,10 @@ export function EditTransactionSheet() {
               isLoadingDelete={deleteMutation.isPending}
               onDelete={handleDelete}
               id={id}
+              accountOptions={accountOptions}
+              categoryOptions={categoryOptions}
+              onCreateAccount={handleCreateAccount}
+              onCreateCategory={handleCreateCategory}
             />
           )}
         </SheetContent>

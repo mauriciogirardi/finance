@@ -65,7 +65,7 @@ export default function TransactionsPage() {
               const ids = row.map((r) => r.original.id);
               deleteTransactions.mutate({ ids });
             }}
-            filterKey="name"
+            filterKey="payee"
             disabled={isPending}
             isLoading={deleteTransactions.isPending}
           />
