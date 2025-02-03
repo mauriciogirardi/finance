@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn(filterKey)?.setFilterValue(event.target.value)
           }
-          className="max-w-sm h-9"
+          className="lg:max-w-sm h-9 w-full"
         />
         {selectedRows.length > 0 && (
           <Button
