@@ -3,6 +3,7 @@ import { HeaderLogo } from "./header-logo";
 import { Navigation } from "./navigation";
 import { Skeleton } from "./ui/skeleton";
 import { WelcomeMessage } from "./welcome-message";
+import { Filters } from "./filters";
 
 export function Header() {
   return (
@@ -21,6 +22,7 @@ export function Header() {
           </ClerkLoading>
         </div>
         <WelcomeMessage />
+        <Filters />
       </div>
     </header>
   );
