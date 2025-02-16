@@ -29,10 +29,12 @@ const app = new Hono().get(
 
     const defaultTo = new Date();
     const defaultFrom = subDays(defaultTo, 30);
+
     const startDate = from
       ? parse(from, "yyyy-MM-dd", new Date())
       : defaultFrom;
     const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
+
     const periodLength = differenceInDays(endDate, startDate) + 1;
     const lastPeriodStart = subDays(startDate, periodLength);
     const lastPeriodEnd = subDays(endDate, periodLength);
@@ -132,11 +134,11 @@ const app = new Hono().get(
       .select({
         date: transactions.date,
         income:
-          sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.accountId} ELSE 0 END)`.mapWith(
+          sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
             Number
           ),
         expenses:
-          sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.accountId} ELSE 0 END)`.mapWith(
+          sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ABS(${transactions.amount}) ELSE 0 END)`.mapWith(
             Number
           ),
       })
